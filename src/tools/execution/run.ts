@@ -68,6 +68,14 @@ export class RunWebhookHandler extends BaseExecutionToolHandler {
       // Get environment config for auth credentials
       const config = getEnvConfig();
       
+      // Check if webhook credentials are configured
+      if (!config.n8nWebhookUsername || !config.n8nWebhookPassword) {
+        return this.formatError(new N8nApiError(
+          "Webhook execution failed: Missing webhook credentials. Please set N8N_WEBHOOK_USERNAME and N8N_WEBHOOK_PASSWORD environment variables.",
+          400
+        ));
+      }
+      
       try {
         // Get the webhook URL with the proper prefix
         const baseUrl = this.getN8nBaseUrl();

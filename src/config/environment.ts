@@ -22,8 +22,8 @@ export const ENV_VARS = {
 export interface EnvConfig {
   n8nApiUrl: string;
   n8nApiKey: string;
-  n8nWebhookUsername: string;
-  n8nWebhookPassword: string;
+  n8nWebhookUsername: string | null | undefined;
+  n8nWebhookPassword: string | null | undefined;
   debug: boolean;
 }
 
@@ -40,7 +40,7 @@ export function loadEnvironmentVariables(): void {
  * @returns Validated environment configuration
  * @throws {McpError} If required environment variables are missing
  */
-export function getEnvConfig(): EnvConfig {
+export function getEnvConfig() {
   const n8nApiUrl = process.env[ENV_VARS.N8N_API_URL];
   const n8nApiKey = process.env[ENV_VARS.N8N_API_KEY];
   const n8nWebhookUsername = process.env[ENV_VARS.N8N_WEBHOOK_USERNAME];
@@ -59,20 +59,6 @@ export function getEnvConfig(): EnvConfig {
     throw new McpError(
       ErrorCode.InitializationError,
       `Missing required environment variable: ${ENV_VARS.N8N_API_KEY}`
-    );
-  }
-
-  if (!n8nWebhookUsername) {
-    throw new McpError(
-      ErrorCode.InitializationError,
-      `Missing required environment variable: ${ENV_VARS.N8N_WEBHOOK_USERNAME}`
-    );
-  }
-
-  if (!n8nWebhookPassword) {
-    throw new McpError(
-      ErrorCode.InitializationError,
-      `Missing required environment variable: ${ENV_VARS.N8N_WEBHOOK_PASSWORD}`
     );
   }
 
